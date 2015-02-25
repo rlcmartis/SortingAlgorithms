@@ -133,33 +133,20 @@ def heapifyFromRoot(A,k):
 def quicksort(A, lo, hi):
 	if(lo < hi):
 		print "---> %s" % (A)
-		p = partition2(A, lo, hi)
+		p = partition(A, lo, hi)
 		quicksort(A, lo, p - 1)
 		quicksort(A, p + 1, hi)
 
 	return A
 
 def partition(A, lo, hi):
-	pivotIndex = lo
-	pivotValue = A[pivotIndex]
-	#swap A[pivotIndex] and A[hi]
-	swap(A, hi, pivotIndex)
-	storeIndex = lo
-	#compare remaning values
-	for i in range(lo, hi-1):
-		if A[i] < pivotValue:
-			#swap A[i] and A[storeIndex]
-			swap(A, i, storeIndex)
-			storeIndex += 1
-	#swap A[storeIndex] and A[hi] "move pivot to final place"
-	swap(A, storeIndex, hi)
-	return storeIndex
-
-def partition2(A, lo, hi):
+	# set pivot
 	pivot = A[lo]
 	left = lo+1
 	right = hi
 	done = False
+	# we reorder element in the list so everything below the pivot comes
+	# before and anything higher comer after it
 	while not done:
 		while left <= right and A[left] <= pivot:
 			left = left + 1
@@ -178,37 +165,52 @@ def partition2(A, lo, hi):
 def mergeSort(A):
 	if len(A) <= 1:
 		return A
-
+	# left and right list
 	left=[]
 	right=[]
+	# find the middle of the list
 	mid = len(A)/2
-
+	
+	#left side of the list
 	left = A[:mid]
+	
+	#right side of the list
 	right = A[mid:]
 
 	print "left: %s" % (left)
 	print "right: %s" % (right)
+	
+	# call the function recursively so that the left and
+	# right list keep being cut down the middle till there's
+	# only one element left in the list
 	mergeSort(left)
 	mergeSort(right)
 
+	# merge function to merge all elements
 	return merge(A, left, right)
-
+	
+# function that merges all elements
 def merge(A, left, right):
+	# counters
 	i=j=k=0
+	
 	while i<len(left) and j<len(right):
+		#if the left element on the list is lower replace it in the original list and up counter
 		if left[i] < right[j]:
 			A[k] = left[i]
 			i=i+1
 		else:
+		#else right is lower
 			A[k] = right[j]
 			j=j+1
 		k=k+1
 
+	#if right list is over then dum left list
 	while i<len(left):
 		A[k] = left[i]
 		i=i+1
 		k=k+1
-
+	#if left list is over then dump right
 	while j < len(right):
 		A[k] = right[j] 
 		j=j+1
